@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     nim: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      unique: true
     },
     nama: {
       type: DataTypes.STRING,
