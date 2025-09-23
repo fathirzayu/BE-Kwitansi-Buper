@@ -1,0 +1,8 @@
+[service]
+name = "be-kwitansi"
+start = "npm start"
+healthcheckPath = "/"
+healthcheckTimeout = 100
+
+[env]
+NODE_ENV = "production"
