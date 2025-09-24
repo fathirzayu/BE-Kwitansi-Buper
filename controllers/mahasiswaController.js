@@ -75,7 +75,7 @@ module.exports = {
       const headerMap = {};
       headers.forEach((h, i) => {
         if (["nim", "NIM"].includes(h)) headerMap.nim = i;
-        if (["nama", "NAMA"].includes(h)) headerMap.nama = i;
+        if (["nama", "NAMA", "nama mahasiswa", "NAMA MAHASISWA"].includes(h)) headerMap.nama = i;
         if (["angkatan", "ANGKATAN"].includes(h)) headerMap.angkatan = i;
       });
 
