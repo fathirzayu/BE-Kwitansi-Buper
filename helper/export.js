@@ -58,7 +58,7 @@ const exportToExcel = (data, startDate, endDate) => {
 
 // ================== PDF ==================
 const exportToPDF = (data, startDate, endDate) => {
-  const doc = new PDFDocument({ margin: 40, size: "A4" });
+  const doc = new PDFDocument({ margin: 40, size: "A4", layout: "landscape" });
 
   let fileDate = startDate && endDate ? `${formatDate(startDate)}_sampai_${formatDate(endDate)}` : formatDate(new Date());
   const fileName = `Data_Kwitansi_${fileDate}.pdf`;
