@@ -14,13 +14,13 @@ const formatDate = (date) => {
 // ================== Excel ==================
 const exportToExcel = (data, startDate, endDate) => {
   const wsData = [
-    ["No", "Tanggal", "NIM", "Nama", "Angkatan", "Jenis Bayar", "Cara Bayar", "Nominal"]
+    ["No", "Tanggal Bayar", "NIM", "Nama", "Angkatan", "Jenis Bayar", "Cara Bayar", "Nominal"]
   ];
 
   data.forEach((item, index) => {
     wsData.push([
       index + 1,
-      item.Tanggal,
+      item["Tanggal Bayar"],
       item.NIM,
       item.Nama,
       item.Angkatan,
@@ -67,12 +67,10 @@ const exportToPDF = (data, startDate, endDate) => {
   const fileName = `Data_Kwitansi_${fileDate}.pdf`;
 
   // Stream output ke file (opsional, bisa juga pipe ke response)
-  doc.pipe(fs.createWriteStream(fileName));
-
   // Header
-  doc.image("./public/buper.png", 40, 30, { width: 50 });
+  doc.image("./public/buper.png", 52, 30, { width: 50 });
   doc.fontSize(18).text("Data Kwitansi", 0, 40, { align: "center" });
-  doc.fontSize(10).text(`Tanggal : ${formatDate(new Date())}`, {
+  doc.fontSize(10).text(`Tanggal Cetakan : ${formatDate(new Date())}`, {
     align: "center",
   });
   doc.moveDown(1.5);
@@ -80,16 +78,16 @@ const exportToPDF = (data, startDate, endDate) => {
   // Table setup
   const tableTop = 100;
   const rowHeight = 25;
-  const colWidths = [25, 70, 90, 160, 60, 120, 80, 120]; 
+  const colWidths = [25, 90, 70, 160, 60, 120, 80, 120]; 
   const headers = [
     "No",
-    "Tanggal",
+    "Tanggal Bayar",
     "NIM",
     "Nama",
     "Angkatan",
     "Jenis Bayar",
     "Cara Bayar",
-    "Nominal",
+    "Nominal"
   ];
   const totalTableWidth = colWidths.reduce((a, b) => a + b, 0);
 
@@ -153,7 +151,7 @@ const exportToPDF = (data, startDate, endDate) => {
     let x = getStartX();
     const row = [
       index + 1,
-      item.Tanggal,
+      item["Tanggal Bayar"],
       item.NIM,
       item.Nama,
       item.Angkatan,
@@ -199,7 +197,6 @@ const exportToPDF = (data, startDate, endDate) => {
       );
   }
 
-  doc.end();
   return { doc, fileName };
 };
 

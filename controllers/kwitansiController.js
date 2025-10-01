@@ -12,12 +12,13 @@ module.exports = {
         angkatan,
         jenisBayar,
         caraBayar,
+        tanggalBayar,
         nominal,
         keteranganBayar,
         terbilang,
       } = req.body;
 
-      if (!nim || !nama || !angkatan || !jenisBayar || !caraBayar || !nominal || !keteranganBayar || !terbilang) {
+      if (!nim || !nama || !angkatan || !jenisBayar || !caraBayar || !tanggalBayar || !nominal || !keteranganBayar || !terbilang) {
         return res.status(400).send({
           msg: "Semua field wajib diisi",
           status: false,
@@ -30,6 +31,7 @@ module.exports = {
         angkatan,
         jenis_bayar : jenisBayar,
         cara_bayar : caraBayar,
+        tanggal_bayar : tanggalBayar,
         nominal,
         keterangan_bayar : keteranganBayar,
         terbilang,
@@ -52,7 +54,7 @@ module.exports = {
       const offset = (page - 1) * limit;
 
       const search = req.query.search || "";
-      const sort = req.query.sort || "createdAt";
+      const sort = req.query.sort || "tanggal_bayar";
       const order = req.query.order === "desc" ? "DESC" : "ASC";
 
       const startDate = req.query.startDate ? new Date(req.query.startDate) : null;
@@ -79,7 +81,7 @@ module.exports = {
 
         filter = {
           ...filter,
-          createdAt: {
+          tanggal_bayar: {
             [Op.between]: [startDate, adjustedEndDate],
           },
         };
@@ -117,7 +119,7 @@ module.exports = {
   exportKwitansi: async (req, res) => {
     try {
       const search = req.query.search || "";
-      const sort = req.query.sort || "createdAt";
+      const sort = req.query.sort || "tanggal_bayar";
       const order = req.query.order === "desc" ? "DESC" : "ASC";
       const startDate = req.query.startDate ? new Date(req.query.startDate) : null;
       const endDate = req.query.endDate ? new Date(req.query.endDate) : null;
@@ -136,7 +138,7 @@ module.exports = {
       if (startDate && endDate) {
         const adjustedEndDate = new Date(endDate);
         adjustedEndDate.setHours(23, 59, 59, 999);
-        filter = { ...filter, createdAt: { [Op.between]: [startDate, adjustedEndDate] } };
+        filter = { ...filter, tanggal_bayar: { [Op.between]: [startDate, adjustedEndDate] } };
       }
 
       const data = await Kwitansi.findAll({ where: filter, order: [[sort, order]] });
@@ -146,12 +148,15 @@ module.exports = {
       }
 
       const exportData = data.map((item) => ({
-        Tanggal: item.createdAt.toLocaleDateString("id-ID"),
+        "Tanggal Bayar": item.tanggal_bayar
+        ? new Date(item.tanggal_bayar).toLocaleDateString("id-ID")
+        : "-",
         NIM: item.nim,
         Nama: item.nama,
         Angkatan: item.angkatan,
         "Jenis Bayar": item.jenis_bayar,
         "Cara Bayar": item.cara_bayar,
+        Tanggal_Bayar: item.tanggal_bayar,
         "Keterangan Bayar": item.keterangan_bayar,
         Nominal: item.nominal,
         Terbilang: item.terbilang,
