@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Mahasiswa.init({
     nim: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true
     },
