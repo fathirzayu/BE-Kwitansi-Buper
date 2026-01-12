@@ -22,7 +22,11 @@ module.exports = (sequelize, DataTypes) => {
     tanggal_bayar: DataTypes.DATE,
     nominal: DataTypes.STRING,
     keterangan_bayar: DataTypes.STRING,
-    terbilang: DataTypes.STRING
+    terbilang: DataTypes.STRING,
+    isDelete: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  }
   }, {
     sequelize,
     modelName: 'Kwitansi',

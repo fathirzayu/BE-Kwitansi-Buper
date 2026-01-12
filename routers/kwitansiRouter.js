@@ -6,5 +6,6 @@ const { verifyToken } = require("../middleware/auth");
 router.post("/cetak", verifyToken, kwitansiController.createKwitansi);
 router.get("/", verifyToken, kwitansiController.getAllKwitansi);
 router.get("/export", kwitansiController.exportKwitansi);
+router.patch("/:id/delete", verifyToken, kwitansiController.deleteKwitansi);
 
 module.exports = router;

@@ -60,7 +60,9 @@ module.exports = {
       const startDate = req.query.startDate ? new Date(req.query.startDate) : null;
       const endDate = req.query.endDate ? new Date(req.query.endDate) : null;
 
-      let filter = {};
+      let filter = {
+        isDelete: 0,
+      };
 
       // filter search
       if (search) {
@@ -125,7 +127,9 @@ module.exports = {
       const endDate = req.query.endDate ? new Date(req.query.endDate) : null;
       const type = req.query.type || "excel";
 
-      let filter = {};
+      let filter = {
+        isDelete: 0,
+      };
       if (search) {
         filter = {
           ...filter,
@@ -177,6 +181,47 @@ module.exports = {
     } catch (error) {
       console.error("exportKwitansi error:", error.message || error);
       res.status(500).send({ status: false, msg: "Internal server error" });
+    }
+  },
+  deleteKwitansi: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        return res.status(400).send({
+          status: false,
+          msg: "ID kwitansi wajib diisi",
+        });
+      }
+
+      const kwitansi = await Kwitansi.findOne({
+        where: {
+          id,
+          isDelete: 0, // pastikan belum dihapus
+        },
+      });
+
+      if (!kwitansi) {
+        return res.status(404).send({
+          status: false,
+          msg: "Data kwitansi tidak ditemukan atau sudah dihapus",
+        });
+      }
+
+      await kwitansi.update({
+        isDelete: 1, // atau true
+      });
+
+      res.status(200).send({
+        status: true,
+        msg: "Kwitansi berhasil dihapus!",
+      });
+    } catch (error) {
+      console.error("deleteKwitansi error:", error.message || error);
+      res.status(500).send({
+        status: false,
+        msg: "Internal server error",
+      });
     }
   },
 };
